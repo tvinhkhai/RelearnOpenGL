@@ -1,0 +1,15 @@
+HELLO, WORLD! (draw a triangle)
+
+DATE 1/1/2023 -
+
+At 11:00PM, I starts learn openGL (this is the nth time), hello again, https://learnopengl.com/
+
+- glEnable(Glenum cap) -> set state options/capabilities, stay enable until glDisable
+
+I. OpenGL
+
+1. What is OpenGL
+- OpenGL is mainly considered an API (Application Programming Interface)
+- OpenGL by itself is not an API, but merely a specification, developed and maintained by Khronos
+- Usually implemented by graphics card manufacturers
+###################################################################################################
