@@ -70,9 +70,10 @@ int main()
 	// Vertex shader
 	const char* vertexShaderSource = "#version 330 core\n"
 		"layout (location = 0) in vec3 aPos;\n"
+		"uniform float aFloat;\n"
 		"void main()\n"
 		"{\n"
-		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"   gl_Position = vec4(aPos.x * aFloat, aPos.y * aFloat, aPos.z, 1.0);\n"
 		"}\0";
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -125,7 +126,8 @@ int main()
 	// Cleanup shader objects after linked
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-
+	float aFloat = 1.0f;
+	int aFlip = 1;
 	// Loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -136,7 +138,16 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		float aModifier = 0.01666f * (float)(aFlip);
+		aFloat -= aModifier;
+		if (aFloat < 0.0f || aFloat >1.0f)
+		{
+			aFlip *= -1;
+		}
+		int aFloatLocation = glGetUniformLocation(shaderProgram, "aFloat");
 		glUseProgram(shaderProgram);
+		glUniform1f(aFloatLocation, aFloat);
+
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
