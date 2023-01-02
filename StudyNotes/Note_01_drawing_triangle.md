@@ -137,3 +137,6 @@ On LearnOpenGL, we will be using `GLFW`
 ### 1. GLFW
 
 GLFW: a C library allows us to create an OpenGL context, define window parameters, and handle user input
+
+speed run for now, note to come back when I have more time:
+https://learnopengl.com/Getting-started/Creating-a-window
