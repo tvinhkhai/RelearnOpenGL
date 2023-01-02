@@ -18,6 +18,8 @@
     - [4. State machine](#4-state-machine)
     - [5. Objects](#5-objects)
     - [6. Additional resources](#6-additional-resources)
+  - [II. Creating a window](#ii-creating-a-window)
+    - [1. GLFW](#1-glfw)
 
 
 ## I. OpenGL
@@ -120,3 +122,18 @@ We can create more than one object in our application, set their options and whe
 
 [OpenGL official website](https://www.opengl.org/)
 [OpenGL registry](https://registry.khronos.org/OpenGL/index_gl.php): host the OpenGL specifications and extensions for all OpenGL versions.
+
+## II. Creating a window
+
+An OpenGL context and an application window are needed before creating stunning graphics.<br>
+However, those operations are specific per OS and OpenGL purposefully tries to abstract itself from these operations -> we have to:
+- Create a window
+- Define a context
+- Handle user input
+
+Luckily, there are quite a few libraries out there that provide the functionality we seek.<br>
+On LearnOpenGL, we will be using `GLFW`
+
+### 1. GLFW
+
+GLFW: a C library allows us to create an OpenGL context, define window parameters, and handle user input
