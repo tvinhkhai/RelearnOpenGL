@@ -1,3 +1,4 @@
+#include <windows.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -5,6 +6,8 @@
 #include "stb_image.h"
 
 #include "shader_s.h"
+
+#include "gli/gli.hpp"
 
 #include <iostream>
 
@@ -93,30 +96,28 @@ int main()
 
 	// load and create a texture 
 	// -------------------------
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load image, create texture and generate mipmaps
-	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	unsigned char* data = stbi_load("data/OK!.png", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
+
+	const char* Filename = "data/OK!_compressed.dds";
+	gli::texture Texture = gli::load(Filename);
+	if (Texture.empty())
 	{
 		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
+		return -1;
+	}	
+
+	gli::gl GL(gli::gl::PROFILE_GL33);
+	gli::gl::format const Format = GL.translate(Texture.format(), Texture.swizzles());
+	GLenum Target = GL.translate(Texture.target());
+	assert(gli::is_compressed(Texture.format()) && Texture.target() == gli::TARGET_2D);
+	GLuint TextureName = 0;
+	glGenTextures(1, &TextureName);
+	glBindTexture(Target, TextureName);
+	glTexParameteri(Target, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(Target, GL_TEXTURE_MAX_LEVEL, static_cast<GLint>(Texture.levels() - 1));
+	glTexParameteriv(Target, GL_TEXTURE_SWIZZLE_RGBA, &Format.Swizzles[0]);
+	glm::tvec3<GLsizei> Extent(Texture.extent(0));
+	glCompressedTexImage2D(Target, 0, Format.Internal, Extent.x, Extent.y, 0, static_cast<GLsizei>(Texture.size(0)), Texture.data(0, 0, 0));
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 	// tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
 	// -------------------------------------------------------------------------------------------
@@ -133,7 +134,7 @@ int main()
 
 		// bind textures on corresponding texture units
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindTexture(GL_TEXTURE_2D, TextureName);
 
 		// render container
 		ourShader.use();
