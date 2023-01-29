@@ -30,4 +30,16 @@
   <ItemGroup>
     <Text Include="..\BuildData.bat" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\shader_s.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\data\Fragment.shader" />
+    <None Include="..\data\Vertex.shader" />
+  </ItemGroup>
 </Project>

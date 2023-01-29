@@ -78,12 +78,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\libs\glfw\include\;$(ProjectDir)..\libs\glad\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libs\glfw\include\;$(ProjectDir)..\libs\nv_dds\;$(ProjectDir)..\libs\glad\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\libs\glfw\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\libs\glfw\include\;$(ProjectDir)..\libs\glad\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\libs\glfw\include\;$(ProjectDir)..\libs\nv_dds\;$(ProjectDir)..\libs\glad\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\libs\glfw\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -127,7 +127,7 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy .\..\release\ $(OutDir)data\</Command>
+      <Command>robocopy .\..\release\ $(OutDir)data\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,7 +147,7 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy .\..\release\ $(OutDir)data\</Command>
+      <Command>robocopy .\..\release\ $(OutDir)data\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -159,6 +159,14 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\BuildData.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\shader_s.h" />
+    <ClInclude Include="src\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\data\Fragment.shader" />
+    <None Include="..\data\Vertex.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
